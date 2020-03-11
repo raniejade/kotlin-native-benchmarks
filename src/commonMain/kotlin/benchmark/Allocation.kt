@@ -8,7 +8,7 @@ import kotlinx.benchmark.*
 @BenchmarkMode(Mode.Throughput)
 class Allocation {
   @Param("30", "60", "120")
-  var fps = 0
+  var iterations = 0
 
   lateinit var data: CharArray
 
@@ -21,7 +21,7 @@ class Allocation {
   @Benchmark
   fun allocateAndKeep(): List<String> {
     val list = mutableListOf<String>()
-    for (i in 0 until fps) {
+    for (i in 0 until iterations) {
       list.add(allocateData())
     }
     return list
@@ -29,7 +29,7 @@ class Allocation {
 
   @Benchmark
   fun allocateAndThrowAway(bh: Blackhole) {
-    for (i in 0 until fps) {
+    for (i in 0 until iterations) {
       bh.consume(allocateData())
     }
   }

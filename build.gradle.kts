@@ -55,6 +55,7 @@ benchmark {
     val main by getting {
       warmups = 2
       iterations = 3
+      include("benchmark.DynamicDispatch")
     }
   }
 
