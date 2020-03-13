@@ -55,7 +55,7 @@ benchmark {
     val main by getting {
       warmups = 2
       iterations = 3
-      include("benchmark.DynamicDispatch")
+      include("benchmark.JNI")
     }
   }
 
@@ -69,4 +69,8 @@ benchmark {
       // nada
     }
   }
+}
+
+tasks.withType(JavaExec::class.java) {
+  jvmArgs = mutableListOf("-Djava.library.path=/home/raniejade/Workspace/personal/kotlin-native-benchmarks/jni/build")
 }

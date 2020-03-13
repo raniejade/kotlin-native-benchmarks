@@ -6,3 +6,6 @@ build
 
 # IntelliJ project files
 .idea
+
+# VScode
+.vscode
