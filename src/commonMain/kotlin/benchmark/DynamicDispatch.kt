@@ -18,17 +18,31 @@ class DynamicDispatch {
     }
   }
 
-  private lateinit var provider: Any
+  private lateinit var actualProvider: ZeroProvider
+  private lateinit var baseProvider: Provider
+  private lateinit var anyProvider: Any
 
   @Setup
   fun setup() {
-    provider = ZeroProvider()
+    actualProvider = ZeroProvider()
+    baseProvider = actualProvider
+    anyProvider = baseProvider
   }
 
   @Benchmark
-  fun call(): Int {
-    if (provider is Provider) {
-      return (provider as Provider).get()
+  fun actual(): Int {
+    return actualProvider.get()
+  }
+
+  @Benchmark
+  fun base(): Int {
+    return baseProvider.get()
+  }
+
+  @Benchmark
+  fun any(): Int {
+    if (anyProvider is Provider) {
+      return (anyProvider as Provider).get()
     }
     return 0
   }
