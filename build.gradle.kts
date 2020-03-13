@@ -9,9 +9,9 @@ import kotlinx.benchmark.gradle.NativeBenchmarkTarget
  */
 
 plugins {
-  kotlin("multiplatform") version "1.3.50"
-  id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
-  id("kotlinx.benchmark") version "0.2.0-dev-7"
+  kotlin("multiplatform") version "1.3.70"
+  id("org.jetbrains.kotlin.plugin.allopen") version "1.3.70"
+  id("kotlinx.benchmark") version "0.2.0-dev-8"
 }
 
 allOpen {
@@ -25,26 +25,33 @@ repositories {
 
 kotlin {
   jvm("jvm")
-  linuxX64("linux")
+  linuxX64("linux") {
+    compilations.getByName("main") {
+      val nativelib by cinterops.creating {
+        packageName("nativelib")
+        compilerOpts("-I$rootDir/nativelib")
+      }
+    }
+  }
 
   sourceSets {
     val commonMain by getting {
       dependencies {
         implementation(kotlin("stdlib-common"))
-        implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-metadata:0.2.0-dev-7")
+        implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-metadata:0.2.0-dev-8")
       }
     }
 
     val jvmMain by getting {
       dependencies {
         implementation(kotlin("stdlib"))
-        implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-7")
+        implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-jvm:0.2.0-dev-8")
       }
     }
 
     val linuxMain by getting {
       dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-linuxx64:0.2.0-dev-7")
+        implementation("org.jetbrains.kotlinx:kotlinx.benchmark.runtime-linuxx64:0.2.0-dev-8")
       }
     }
   }
@@ -55,7 +62,6 @@ benchmark {
     val main by getting {
       warmups = 2
       iterations = 3
-      include("benchmark.JNI")
     }
   }
 
